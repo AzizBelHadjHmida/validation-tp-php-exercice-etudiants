@@ -1,4 +1,17 @@
     <?php
+    session_start();
+
+
+
+    if (!isset($_SESSION['visites'])) {
+        $_SESSION['visites'] = 1;
+        $messageVisite = "Bienvenue à notre plateforme ";
+    } else {
+        $_SESSION['visites']++;
+        $n = $_SESSION['visites'];
+    
+        $messageVisite = "Merci pour votre fidélité <br> c est votre {$n}ieme visite.";
+    }
     class Etudiant
     {
         public string $nom;
@@ -37,7 +50,7 @@
             $moy /= count($this->notes);
             return $moy;
         }
-        public function afficher_notes()
+        public function afficherInfos()
         { ?>
             <div class="container text-center">
                 <table class="table  table-bordered">
@@ -66,15 +79,33 @@
                             <td class="table-primary">votre moyenne est:<?= $moy ?></td>
                         </tr>
                 <?php }
-        } ?>
+
+        } 
+        
+$etudiantData = $_SESSION['etudiant'];
+$etudiant = new Etudiant($etudiantData['nom'], $etudiantData['notes']);
+        
+        ?>
                     </tbody>
                 </table>
             </div>
 
 
-            <?php
-            $e1 = new Etudiant("aymen", [11, 13, 18, 7, 10, 13, 2, 5, 1]);
-            $e2 = new Etudiant("skander", [15, 9, 8, 16]);
-            $e1->afficher_notes();
-            $e2->afficher_notes();
-            ?>
+            <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Informations Étudiant</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body style="font-family:Arial; padding:20px;">
+    <h2>Résultat de l'étudiant</h2>
+    <p style="background-color:#e9ecef; padding:10px;"><?php echo $messageVisite; ?></p>
+
+    <?php $etudiant->afficherInfos(); ?>
+
+    <form method="get" action="login.php">
+        <button type="submit" name="reset" value="1">Réinitialiser</button>
+    </form>
+</body>
+</html>
